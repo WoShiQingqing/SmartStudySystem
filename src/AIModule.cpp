@@ -14,6 +14,7 @@ ScenarioFeatures extractFeatures(const Scenario& scenario) {
             ? 0.0
             : static_cast<double>(features.totalRequiredTime) / scenario.availableTime;
 
+    // Bail out early if someone feeds an empty scenario into the AI module.
     if (scenario.tasks.empty()) {
         return features;
     }
@@ -22,6 +23,7 @@ ScenarioFeatures extractFeatures(const Scenario& scenario) {
     double totalDeadlineInverse = 0.0;
     for (const Task& task : scenario.tasks) {
         totalImportance += task.importance;
+        // Smaller deadlines should push the urgency feature upward.
         totalDeadlineInverse += 1.0 / task.deadline;
     }
 
@@ -34,11 +36,13 @@ ScenarioFeatures extractFeatures(const Scenario& scenario) {
         squaredDifference += difference * difference;
     }
 
+    // Standard deviation is a simple way to show whether importance is tightly grouped or spread out.
     features.importanceVariation = std::sqrt(squaredDifference / scenario.tasks.size());
     return features;
 }
 
 StrategyResult runAIModule(const Scenario& scenario) {
+    // This is only a starter heuristic so Student 5 can swap in a real model later.
     ScenarioFeatures features = extractFeatures(scenario);
 
     StrategyResult result;
@@ -56,4 +60,3 @@ StrategyResult runAIModule(const Scenario& scenario) {
 
     return result;
 }
-

@@ -19,4 +19,3 @@ void printStrategyResult(const StrategyResult& result);
 void printComparisonTable(const std::vector<StrategyResult>& results);
 
 #endif
-
