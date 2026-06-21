@@ -19,6 +19,7 @@ int readInt(const char* prompt) {
             return value;
         }
 
+        // Reset the stream so one bad input does not break the whole menu loop.
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Invalid input. Please enter a number.\n";
@@ -44,6 +45,7 @@ void inspectScenario(const Scenario& scenario) {
 void runScenario(const Scenario& scenario) {
     printScenarioSummary(scenario);
 
+    // Every module gets the exact same scenario so the comparison stays fair.
     StrategyResult sortingResult = runSortingStrategy(scenario);
     StrategyResult greedyResult = runGreedyStrategy(scenario);
     StrategyResult dpResult = runDPStrategy(scenario);
@@ -66,6 +68,7 @@ void runScenario(const Scenario& scenario) {
 }  // namespace
 
 int main() {
+    // Load the shared dataset once at startup and reuse it for the whole session.
     std::vector<Scenario> scenarios = createScenarios();
 
     while (true) {
@@ -73,7 +76,6 @@ int main() {
         std::cout << "1. List scenarios\n";
         std::cout << "2. Inspect scenario dataset\n";
         std::cout << "3. Run integration demo for one scenario\n";
-        std::cout << "4. Show collaboration rules\n";
         std::cout << "0. Exit\n";
 
         int choice = readInt("Enter your choice: ");
@@ -91,13 +93,10 @@ int main() {
         } else if (choice == 3) {
             const Scenario& scenario = chooseScenario(scenarios);
             runScenario(scenario);
-        } else if (choice == 4) {
-            printIntegrationRules();
         } else {
-            std::cout << "Unsupported option. Please choose 0 to 4.\n";
+            std::cout << "Unsupported option. Please choose 0 to 3.\n";
         }
     }
 
     return 0;
 }
-
