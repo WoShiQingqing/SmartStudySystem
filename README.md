@@ -2,7 +2,6 @@
 
 ## Local setup
 
-No Python virtual environment is required.
 Use the system C++ toolchain directly.
 
 ## Build and run
