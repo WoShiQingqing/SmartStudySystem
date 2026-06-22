@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <ctime>
 
+// Compare two tasks by their ratio (importance / studyTime)
+// Choose less studyTime task if ratios are equal.
 static bool byRatio(const Task& a, const Task& b) {
     double ratioA = a.importanceTimeRatio();
     double ratioB = b.importanceTimeRatio();
@@ -11,6 +13,7 @@ static bool byRatio(const Task& a, const Task& b) {
     return a.studyTime < b.studyTime;
 }
 
+// The core greedy strategy: Sort tasks by ratio, then select until avaliable time not enough
 StrategyResult runGreedyStrategy(const Scenario& scenario) {
     StrategyResult result;
     result.strategyName = "Greedy strategy";
@@ -24,6 +27,7 @@ StrategyResult runGreedyStrategy(const Scenario& scenario) {
 
     result.rankedTasks = sorted;
 
+    // Greedily select tasks and check if have enough avaliable time
     for (int i = 0; i < (int)sorted.size(); i++) {
         if (result.totalStudyTime + sorted[i].studyTime <= scenario.availableTime) {
             result.selectedTasks.push_back(sorted[i]);
