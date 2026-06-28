@@ -6,6 +6,7 @@
 
 namespace {
 
+// This keeps the ranking rule in one place for merge sort
 bool comesBefore(const Task& left, const Task& right) {
     if (left.deadline != right.deadline) {
         return left.deadline < right.deadline;
@@ -19,6 +20,7 @@ bool comesBefore(const Task& left, const Task& right) {
     return left.id < right.id;
 }
 
+// This merges two sorted halves back into one ordered range
 void merge(
     std::vector<Task>& tasks,
     std::vector<Task>& buffer,
@@ -51,6 +53,7 @@ void merge(
     }
 }
 
+// This is the recursive split-and-merge part of merge sort
 void mergeSort(
     std::vector<Task>& tasks,
     std::vector<Task>& buffer,
@@ -67,6 +70,7 @@ void mergeSort(
     merge(tasks, buffer, left, middle, right);
 }
 
+// This walks the ranked list and stops when time runs out
 std::vector<Task> chooseTasksWithinTimeLimit(const std::vector<Task>& rankedTasks, int availableTime) {
     std::vector<Task> selectedTasks;
     int usedTime = 0;
@@ -81,6 +85,7 @@ std::vector<Task> chooseTasksWithinTimeLimit(const std::vector<Task>& rankedTask
     return selectedTasks;
 }
 
+// This totals the selected hours for the result summary
 int totalStudyTime(const std::vector<Task>& tasks) {
     int total = 0;
     for (const Task& task : tasks) {
@@ -89,6 +94,7 @@ int totalStudyTime(const std::vector<Task>& tasks) {
     return total;
 }
 
+// This totals the selected importance for the result summary
 int totalImportance(const std::vector<Task>& tasks) {
     int total = 0;
     for (const Task& task : tasks) {
@@ -115,6 +121,7 @@ StrategyResult runSortingStrategy(const Scenario& scenario) {
 
     const auto end = std::chrono::high_resolution_clock::now();
     result.executionTimeMs = std::chrono::duration<double, std::milli>(end - start).count();
+    // Keep the final note aligned with the actual ranking rule used above
     result.comment =
         "Merge Sort ranks tasks by earliest deadline first, then higher importance, "
         "shorter study time, and task ID. Tasks are selected in that order while "

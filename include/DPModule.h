@@ -4,7 +4,7 @@
 #include "Scenario.h"
 #include "StrategyResult.h"
 
+// This runs the DP planner on one scenario
 StrategyResult runDPStrategy(const Scenario& scenario);
 
 #endif
-
