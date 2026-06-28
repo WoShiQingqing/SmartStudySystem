@@ -1,62 +1,109 @@
 #include "AIModule.h"
-
+#include "SortingModule.h"  // For Student 2's Merge Sort Module
+#include "GreedyModule.h"   // For Student 3's Greedy Ratio Module
+#include "DPModule.h"       // For Student 4's 0/1 Knapsack DP Module
 #include <cmath>
+#include <numeric>
+#include <chrono>
 
-#include "Utils.h"
-
+// Module 5: Extract mathematical scenario features from input
 ScenarioFeatures extractFeatures(const Scenario& scenario) {
     ScenarioFeatures features;
     features.numberOfTasks = static_cast<int>(scenario.tasks.size());
-    features.totalRequiredTime = sumStudyTime(scenario.tasks);
     features.availableTime = scenario.availableTime;
-    features.timePressureRatio =
-        scenario.availableTime == 0
-            ? 0.0
-            : static_cast<double>(features.totalRequiredTime) / scenario.availableTime;
 
-    // Bail out early if someone feeds an empty scenario into the AI module.
-    if (scenario.tasks.empty()) {
+    // Handle edge case where task list is empty
+    if (features.numberOfTasks == 0) {
+        features.totalRequiredTime = 0;
+        features.timePressureRatio = 0.0;
+        features.averageImportance = 0.0;
+        features.deadlineTightness = 0.0;
+        features.importanceVariation = 0.0;
         return features;
     }
 
-    double totalImportance = 0.0;
-    double totalDeadlineInverse = 0.0;
-    for (const Task& task : scenario.tasks) {
-        totalImportance += task.importance;
-        // Smaller deadlines should push the urgency feature upward.
-        totalDeadlineInverse += 1.0 / task.deadline;
+    int totalRequiredTime = 0;
+    double sumImportance = 0.0;
+    double sumDeadline = 0.0;
+
+    // First pass: Calculate sums for required time, importance, and deadlines
+    for (const auto& task : scenario.tasks) {
+        totalRequiredTime += task.studyTime;
+        sumImportance += task.importance;
+        sumDeadline += task.deadline;
     }
 
-    features.averageImportance = totalImportance / scenario.tasks.size();
-    features.deadlineTightness = totalDeadlineInverse / scenario.tasks.size();
-
-    double squaredDifference = 0.0;
-    for (const Task& task : scenario.tasks) {
-        double difference = task.importance - features.averageImportance;
-        squaredDifference += difference * difference;
+    features.totalRequiredTime = totalRequiredTime;
+    
+    // Calculate Time Pressure Ratio (TPR)
+    if (features.availableTime > 0) {
+        features.timePressureRatio = static_cast<double>(totalRequiredTime) / features.availableTime;
+    } else {
+        features.timePressureRatio = 99.0; // High value representing extreme time shortage
     }
 
-    // Standard deviation is a simple way to show whether importance is tightly grouped or spread out.
-    features.importanceVariation = std::sqrt(squaredDifference / scenario.tasks.size());
+    // Calculate mean statistics
+    features.averageImportance = sumImportance / features.numberOfTasks;
+    features.deadlineTightness = sumDeadline / features.numberOfTasks;
+
+    // Second pass: Calculate Importance Variation (Statistical Variance)
+    double varianceSum = 0.0;
+    for (const auto& task : scenario.tasks) {
+        varianceSum += std::pow(task.importance - features.averageImportance, 2);
+    }
+    features.importanceVariation = varianceSum / features.numberOfTasks;
+
     return features;
 }
 
+// Module 5 & 6: Intelligent strategy prediction and execution tracking
 StrategyResult runAIModule(const Scenario& scenario) {
-    // This is only a starter heuristic so Student 5 can swap in a real model later.
+    // 1. Extract context features from the current scenario
     ScenarioFeatures features = extractFeatures(scenario);
 
-    StrategyResult result;
-    result.strategyName = "AI/ML recommendation";
-    result.comment =
-        "Starter rule only. Student 5 can replace this with rule-based AI, Decision Tree, or k-NN.";
+    // 2. Map features to the best algorithmic strategy via Rule-based Decision Tree
+    std::string predictedStrategy;
 
-    if (features.timePressureRatio >= 1.7) {
-        result.comment += " Current placeholder prediction: Dynamic Programming.";
-    } else if (features.deadlineTightness >= 0.45) {
-        result.comment += " Current placeholder prediction: Sorting-based ranking.";
-    } else {
-        result.comment += " Current placeholder prediction: Greedy strategy.";
+    if (features.timePressureRatio <= 0.8) {
+        // Condition A: Time is highly abundant framework (TPR <= 0.8)
+        // Recommend Student 2's Divide-and-Conquer Sorting (Merge Sort)
+        predictedStrategy = "Sorting-based ranking";
+    } 
+    else if (features.timePressureRatio > 1.5 && features.deadlineTightness <= 3.0) {
+        // Condition B: Extreme time shortage and urgent deadlines close by
+        // Recommend Student 3's cost-benefit ratio scheduler (Greedy Strategy)
+        predictedStrategy = "Greedy strategy";
+    } 
+    else {
+        // Condition C: Standard constrained resource allocation situations
+        // Treat as 0/1 Knapsack, recommend Student 4's Dynamic Programming Module
+        predictedStrategy = "Dynamic Programming";
     }
+
+    // 3. Execute the predicted strategy and measure runtime performance precision (Module 6)
+    StrategyResult result;
+    
+    auto start = std::chrono::high_resolution_clock::now();
+
+    if (predictedStrategy == "Sorting-based ranking") {
+        result = runSortingStrategy(scenario); // Triggers Student 2's system
+    } 
+    else if (predictedStrategy == "Greedy strategy") {
+        result = runGreedyStrategy(scenario);   // Triggers Student 3's system
+    } 
+    else {
+        result = runDPStrategy(scenario);       // Triggers Student 4's system
+    }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    double elapsedMs = std::chrono::duration<double, std::milli>(end - start).count();
+
+    // 4. Wrap metadata and performance logs into the final result object
+    result.strategyName = "AI Recommendation (" + predictedStrategy + ")";
+    result.executionTimeMs = elapsedMs;
+    result.comment = "AI Decision Tree selected '" + predictedStrategy + "' based on TPR=" + 
+                     std::to_string(features.timePressureRatio).substr(0,4) + 
+                     " and DeadlineTightness=" + std::to_string(features.deadlineTightness).substr(0,4) + " days.";
 
     return result;
 }
