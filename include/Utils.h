@@ -8,10 +8,12 @@
 #include "StrategyResult.h"
 #include "Task.h"
 
+// These helpers keep repeated totals out of the strategy modules
 int sumStudyTime(const std::vector<Task>& tasks);
 int sumImportance(const std::vector<Task>& tasks);
 std::string formatTaskList(const std::vector<Task>& tasks);
 
+// These print helpers keep the CLI output style in one place
 void printScenarioMenu(const std::vector<Scenario>& scenarios);
 void printScenarioSummary(const Scenario& scenario);
 void printTaskTable(const std::vector<Task>& tasks);

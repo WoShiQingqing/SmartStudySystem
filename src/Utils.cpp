@@ -25,7 +25,7 @@ std::string formatTaskList(const std::vector<Task>& tasks) {
         return "-";
     }
 
-    // We only print task IDs here to keep result tables compact.
+    // We only print task IDs here to keep result tables compact
     std::ostringstream stream;
     for (std::size_t index = 0; index < tasks.size(); ++index) {
         if (index > 0) {
@@ -52,7 +52,7 @@ void printScenarioSummary(const Scenario& scenario) {
 }
 
 void printTaskTable(const std::vector<Task>& tasks) {
-    // This is the shared dataset view everyone should use in demos and screenshots.
+    // This is the shared dataset view everyone should use in demos and screenshots
     std::cout << '\n';
     std::cout << std::left
               << std::setw(5) << "ID"
@@ -92,7 +92,7 @@ void printStrategyResult(const StrategyResult& result) {
 }
 
 void printComparisonTable(const std::vector<StrategyResult>& results) {
-    // Student 5 can reuse this directly for the final strategy comparison output.
+    // Student 5 can reuse this directly for the final strategy comparison output
     std::cout << '\n';
     std::cout << std::left
               << std::setw(24) << "Strategy"

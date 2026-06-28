@@ -6,6 +6,7 @@
 
 #include "Task.h"
 
+// This bundles one test case with its time limit and task list
 struct Scenario {
     std::string name;
     std::string description;
@@ -14,4 +15,3 @@ struct Scenario {
 };
 
 #endif
-

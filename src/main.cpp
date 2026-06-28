@@ -19,7 +19,7 @@ int readInt(const char* prompt) {
             return value;
         }
 
-        // Reset the stream so one bad input does not break the whole menu loop.
+        // Reset the stream so one bad input does not break the whole menu loop
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Invalid input. Please enter a number.\n";
@@ -27,6 +27,7 @@ int readInt(const char* prompt) {
 }
 
 const Scenario& chooseScenario(const std::vector<Scenario>& scenarios) {
+    // Reuse the same menu for inspect mode and run mode
     printScenarioMenu(scenarios);
     int choice = readInt("Choose a scenario number: ");
 
@@ -45,7 +46,7 @@ void inspectScenario(const Scenario& scenario) {
 void runScenario(const Scenario& scenario) {
     printScenarioSummary(scenario);
 
-    // Every module gets the exact same scenario so the comparison stays fair.
+    // Every module gets the exact same scenario so the comparison stays fair
     StrategyResult sortingResult = runSortingStrategy(scenario);
     StrategyResult greedyResult = runGreedyStrategy(scenario);
     StrategyResult dpResult = runDPStrategy(scenario);
@@ -68,7 +69,7 @@ void runScenario(const Scenario& scenario) {
 }  // namespace
 
 int main() {
-    // Load the shared dataset once at startup and reuse it for the whole session.
+    // Load the shared dataset once at startup and reuse it for the whole session
     std::vector<Scenario> scenarios = createScenarios();
 
     while (true) {

@@ -4,7 +4,7 @@
 
 namespace {
 
-// This helper keeps the task list readable when we build scenarios below.
+// This helper keeps the task list readable when we build scenarios below
 Task makeTask(
     const char* id,
     const char* name,
@@ -18,7 +18,7 @@ Task makeTask(
 }
 
 std::vector<Task> makeBaseTasks() {
-    // All scenarios start from the same base dataset so later comparisons stay fair.
+    // All scenarios start from the same base dataset so later comparisons stay fair
     return {
         makeTask("T1", "Revise Dynamic Programming", 3, 8, 2, 4, "Revision"),
         makeTask("T2", "Complete Graph Tutorial", 2, 7, 3, 3, "Tutorial"),
@@ -46,7 +46,7 @@ Scenario makeLowPressureScenario() {
 
 Scenario makeHighPressureScenario() {
     std::vector<Task> tasks = makeBaseTasks();
-    // A few tasks get even more valuable here to make selection harder.
+    // A few tasks get even more valuable here to make selection harder
     tasks[3].importance = 10;
     tasks[6].importance = 9;
     tasks[8].importance = 10;
@@ -61,7 +61,7 @@ Scenario makeHighPressureScenario() {
 
 Scenario makeDeadlineFocusedScenario() {
     std::vector<Task> tasks = makeBaseTasks();
-    // Tighten several deadlines so urgency matters more than usual.
+    // Tighten several deadlines so urgency matters more than usual
     tasks[0].deadline = 1;
     tasks[1].deadline = 1;
     tasks[3].deadline = 1;
@@ -79,7 +79,7 @@ Scenario makeDeadlineFocusedScenario() {
 
 Scenario makeImportanceFocusedScenario() {
     std::vector<Task> tasks = makeBaseTasks();
-    // Spread the importance scores more so top-value tasks stand out clearly.
+    // Spread the importance scores more so top-value tasks stand out clearly
     tasks[3].importance = 10;
     tasks[6].importance = 10;
     tasks[8].importance = 10;
@@ -98,7 +98,7 @@ Scenario makeImportanceFocusedScenario() {
 }  // namespace
 
 std::vector<Scenario> createScenarios() {
-    // Keep all scenario creation in one place so everyone tests the same inputs.
+    // Keep all scenario creation in one place so everyone tests the same inputs
     return {
         makeLowPressureScenario(),
         makeHighPressureScenario(),

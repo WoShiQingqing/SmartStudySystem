@@ -5,7 +5,7 @@
 
 #include "Scenario.h"
 
+// This builds the shared scenarios used across the whole project
 std::vector<Scenario> createScenarios();
 
 #endif
-

@@ -23,7 +23,7 @@ StrategyResult runDPStrategy(const Scenario& scenario) {
         return result;
     }
 
-    // dp[i][w] means the best importance score using first i tasks within w hours
+    // dp[i][w] stores the best importance using the first i tasks within w hours
     vector<vector<int>> dp(n + 1, vector<int>(timeLimit + 1, 0));
 
     for (int i = 1; i <= n; i++) {
@@ -44,7 +44,7 @@ StrategyResult runDPStrategy(const Scenario& scenario) {
 
     int w = timeLimit;
 
-    // backtrack to find which tasks are selected
+    // Walk backward through the table to recover the chosen tasks
     for (int i = n; i >= 1; i--) {
         if (dp[i][w] != dp[i - 1][w]) {
             result.selectedTasks.push_back(tasks[i - 1]);

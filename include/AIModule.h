@@ -4,6 +4,7 @@
 #include "Scenario.h"
 #include "StrategyResult.h"
 
+// These are the summary signals the AI module looks at
 struct ScenarioFeatures {
     int numberOfTasks = 0;
     int totalRequiredTime = 0;
@@ -14,8 +15,9 @@ struct ScenarioFeatures {
     double importanceVariation = 0.0;
 };
 
+// This turns a raw scenario into a smaller feature set
 ScenarioFeatures extractFeatures(const Scenario& scenario);
+// This picks a strategy from those features and runs it
 StrategyResult runAIModule(const Scenario& scenario);
 
 #endif
-

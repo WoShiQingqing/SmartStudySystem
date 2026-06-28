@@ -6,6 +6,7 @@
 
 #include "Task.h"
 
+// This is the common output shape every strategy returns
 struct StrategyResult {
     std::string strategyName;
     std::vector<Task> rankedTasks;
@@ -17,4 +18,3 @@ struct StrategyResult {
 };
 
 #endif
-
